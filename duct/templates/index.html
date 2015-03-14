@@ -1,0 +1,93 @@
+<!doctype html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<html lang="en" data-useragent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>duct</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/foundation.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/duct.css') }}" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lato|Sunshiney|Poiret+One|Open+Sans|Exo" />
+    <script src="{{ url_for('static', filename='js/vendor/modernizr.js') }}"></script>
+    <script>
+      window.username = "{{ session.user }}";
+      window.page = "index";
+    </script>
+  </head>
+  <body>
+    {% include "navbar.html" %}
+    <div class="vertical-spacer-25"></div>
+    <div class="row">
+      <div class="large-12 columns">
+        <div class="panel" id="main-panel">
+          <div class="row">
+            <div id="splash">duct</div>
+          </div>
+        </div>
+        <div class="vertical-spacer-10"></div>
+        <form id="run-contract-form" action="#" method="POST">
+          <div class="row">
+            <div class="large-3 columns">
+              <h5>Contract address</h5>
+            </div>
+            <div class="large-9 columns end">
+              <input type="text" id="contract-address-input" placeholder="Enter a contract address" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="large-3 columns">
+              <h5>Gas input</h5>
+            </div>
+            <div class="large-9 columns end">
+              <input type="text" id="gas-input" placeholder="Amount of gas to send to contract" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="large-3 columns">
+              <h5>Function name</h5>
+            </div>
+            <div class="large-9 columns end">
+              <input type="text" id="function-name-input" placeholder="Name of function to execute" />
+            </div>
+          </div>
+          <div class="row">
+            <center>
+              <button type="submit" class="button large alert" id="run-contract-button">Run Contract</button>
+            </center>
+          </div>
+        </div>
+        <hr />
+        <div class="row">
+          <div id="status-receiver" class="centered"></div>
+        </div>
+        <hr />
+        <div class="row">
+          <div id="main-receiver"></div>
+        </div>
+      </div>
+    </div>
+    <div id="modal-dynamic" class="reveal-modal small" data-reveal>
+      <h3 id="modal-header"></h3>
+      <div id="modal-body"></div>
+      <a class="close-reveal-modal">&#215;</a>
+      <div id="modal-ok-box">
+        <button id="modal-ok-button" class="button small">Ok</button>
+      </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/vendor/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/jquery-migrate.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/placeholders.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/foundation/foundation.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/foundation/foundation.dropdown.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/foundation/foundation.topbar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/foundation/foundation.tab.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/foundation/foundation.reveal.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/socket.io.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/duct.js') }}"></script>
+    <script>
+      $(document).foundation();
+      var doc = document.documentElement;
+      doc.setAttribute('data-useragent', navigator.userAgent);
+    </script>
+  </body>
+</html>
