@@ -156,7 +156,7 @@ def run_contract(req):
     s = t.state()
     t.gas_limit = 100000000
     s = t.state()
-    filename = "/home/jack/src/serpent-core/serpent/consensus.se"
+    filename = "static/contracts/consensus.se"
     print BB("Testing contract:"), BG(filename)
     c = s.abi_contract(filename, gas=req['gas_input']) # 70000000
     
