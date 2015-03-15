@@ -116,38 +116,6 @@ def fix(x):
 def unfix(x):
     return x / 0x10000000000000000
 
-def fold(arr, num_cols):
-    folded = []
-    num_rows = len(arr) / float(num_cols)
-    if num_rows != int(num_rows):
-        raise Exception("array length (%i) not divisible by %i" % (len(arr), num_cols))
-    num_rows = int(num_rows)
-    for i in range(num_rows):
-        row = []
-        for j in range(num_cols):
-            row.append(arr[i*num_cols + j])
-        folded.append(row)
-    return folded
-
-def display(arr, description=None, show_all=None, refold=False):
-    if description is not None:
-        print(BW(description))
-    if refold and type(refold) == int:
-        num_rows = len(arr) / float(refold)
-        if num_rows == int(num_rows) and len(arr) > refold:
-            print(np.array(fold(map(unfix, arr), refold)))
-        else:
-            refold = False
-    if not refold:
-        if show_all is not None:
-            print(pd.DataFrame({
-                'result': arr,
-                'base 16': map(hex, arr),
-                'base 2^64': map(unfix, arr),
-            }))
-        else:
-            print(json.dumps(map(unfix, arr), indent=3, sort_keys=True))
-
 @socketio.on("run-contract", namespace="/socket.io/")
 def run_contract(req):
     print "run-contract:", json.dumps(req, indent=3, sort_keys=True)
@@ -220,13 +188,6 @@ def run_contract(req):
 
     arglist = [outcomes_final, consensus_reward, smooth_rep, reports_mask, num_players, num_events]
     reporter_bonus = c.participation(*arglist)
-
-    display(loading_vector, "Loadings:", show_all=True)
-    display(adjusted_scores, "Adjusted scores:")
-    display(scores, "Scores:")
-    display(smooth_rep, "Updated reputation:")
-    display(outcomes_final, "Outcomes (final):")
-    display(reporter_bonus, "Reporter bonus:")
 
     emit("contract-output", {
         "reputation": map(unfix, smooth_rep),

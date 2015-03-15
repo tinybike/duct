@@ -84,56 +84,6 @@
             this.reset();
         });
 
-        // Submit a new question for voting
-        $('#new-question').click(function (event) {
-            event.preventDefault();
-            var answers = '<ul class="plain flush-left" id="answer-list">' +
-                '<li><input type="text" id="answer-1" class="possible-answer" value="Yes" required /></li>' +
-                '<li><input type="text" id="answer-2" class="possible-answer" value="No" required /></li>' +
-                '<li><input type="text" id="answer-3" class="possible-answer" value="Maybe" required /></li>' +
-                '</ul>' +
-                '<button class="button secondary tiny" id="less-options">-</button>&nbsp;' +
-                '<button class="button secondary tiny" id="more-options">+</button>';
-            var question = '<form action="#" method="POST" id="new-question-form">' +
-                '<input type="text" id="question-text" name="question-text" ' +
-                'placeholder="Enter your question here" required autofocus />' +
-                '<h5>Possible answers:</h5><div class="row">' + answers + "</div>" +
-                '<button type="submit" class="button small" id="submit-question-button">Submit</button>' +
-                '</form>';
-            modal_prompt(question, "h5", "Propose a question");
-            $('#less-options').click(function (event) {
-                var num_answers = $('#answer-list').children().length;
-                if (num_answers > 1)
-                    $('#answer-' + JSON.stringify(num_answers)).parent().remove();
-                event.preventDefault();
-            });
-            $('#more-options').click(function (event) {
-                var num_answers = parseInt($('#answer-list').children().length);
-                $('<li />').append(
-                    $('<input required />')
-                        .addClass("possible-answer")
-                        .val("")
-                        .attr("type", "text")
-                        .attr("id", "answer-" + JSON.stringify(num_answers + 1))
-                        .attr("placeholder", "Enter answer here...")
-                ).appendTo($('#answer-list'));
-                event.preventDefault();
-            });
-            $('form#new-question-form').submit(function (event) {
-                event.preventDefault();
-                var answers = [];
-                $('.possible-answer').each(function () {
-                    answers.push(this.value);
-                });
-                self.socket.emit('submit-question', {
-                    question_text: $('#question-text').val(),
-                    answers: answers,
-                });
-                this.reset();
-                $('#modal-dynamic').foundation('reveal', 'close');
-            });
-        });
-
         return self;
     };
 
