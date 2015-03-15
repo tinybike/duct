@@ -48,12 +48,26 @@
         this.socket.on('synced', function (res) {
             console.log(res);
         });
+        this.socket.on('contract-created', function (res) {
+            if (res && res.address) {
+                $('#contract-address-input').val(res.address);
+                if (res.functions) {
+                    var html = "<select>";
+                    for (var i = 0, len = res.functions.length; i < len; ++i) {
+                        html += "<option>" + res.functions[i] + "</option>";
+                    }
+                    html += "</select>";
+                    $('#functions-input-label').show();
+                    $('#functions-input').html(html);
+                }
+            } else {
+                console.log("Error creating contract:", res);
+            }
+        });
         this.socket.on('contract-output', function (res) {
             if (res && res.reputation && res.outcomes && res.reporter_bonus) {
                 $('#status-receiver').slideUp('slow');
                 var reputation = "Reputation: " + JSON.stringify(res.reputation, null, 3) + "\n";
-                var outcomes = "Outcomes: " + JSON.stringify(res.outcomes, null, 3) + "\n";
-                var reporter_bonus = "Reporter bonus: " + JSON.stringify(res.reporter_bonus, null, 3);
                 var output = $('<pre />').text(reputation + outcomes + reporter_bonus);
                 $('#main-receiver').append(output).show();
             } else {
@@ -70,6 +84,37 @@
             event.preventDefault();
             $('#modal-ok-box').hide();
             $('#modal-dynamic').foundation('reveal', 'close');
+        });
+
+        $('#create-contract').click(function (event) {
+            event.preventDefault();
+            var prompt = '<hr /><div class="row centered">' +
+                         '<form action="#" method="POST" id="create-contract-form">' +
+                         '<textarea id="contract-source" />' +
+                         '<hr />' +
+                         '<button type="submit" class="button expand" '+
+                         'id="create-contract-button">Create</button>' +
+                         '</form></div>';
+            modal_prompt(prompt, "h2", "Create contract");
+            $('#create-contract-form').submit(function (event) {
+                event.preventDefault();
+                var source = $('#contract-source').val();
+                if (source == "") {
+                    source = "def main(a,b):\n"+
+                             "    return(a^b)";
+                }
+                self.socket.emit('create-contract', {
+                    source: source,
+                    gas_input: 70000000
+                });
+                this.reset();
+                $('#modal-dynamic').foundation('reveal', 'close');
+            });
+        });
+
+        $('form#compile-contract').submit(function (event) {
+            event.preventDefault();
+            // c305c901078781c232a2a521c2af7980f8385ee9
         });
 
         $('form#run-contract-form').submit(function (event) {

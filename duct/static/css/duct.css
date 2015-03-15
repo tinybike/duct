@@ -54,6 +54,9 @@ body {
   text-align: center;
   margin-top: -5px;
 }
+#functions-input-label {
+  display: none;
+}
 
 #modal-ok-box {
   display: none;
