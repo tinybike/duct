@@ -16,8 +16,6 @@ try:
 except:
     pass
 import random
-import base64
-import string
 import json
 from decimal import *
 import bcrypt
@@ -25,19 +23,9 @@ from flask import Flask, session, request, escape, url_for, redirect, render_tem
 from flask.ext.socketio import SocketIO, emit
 from werkzeug.datastructures import CallbackDict
 from werkzeug import secure_filename
-from pprint import pprint
 import numpy as np
 import pandas as pd
-try:
-    from colorama import Fore, Style, init
-except ImportError:
-    pass
-import serpent
-from pyethereum import tester as t
-from pyethereum.slogging import get_logger, configure_logging
-
-# logger = get_logger()
-# configure_logging(':trace')
+from pyethereum import tester, utils, abi
 
 np.set_printoptions(linewidth=225,
                     suppress=True,
@@ -47,9 +35,6 @@ pd.set_option("display.max_rows", 25)
 pd.set_option("display.width", 1000)
 pd.set_option('display.float_format', lambda x: '%.8f' % x)
 
-# colorama
-init()
-
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "AOgQciQ7LyXRfnlYwGfeL"
 app.config["DEBUG"] = True
@@ -57,25 +42,9 @@ app.config["TESTING"] = False
 socketio = SocketIO(app)
 
 print "Forming new test genesis block"
-s = t.state()
-t.gas_limit = 100000000
-s = t.state()
-
-#############
-# Test data #
-#############
-
-max_iterations = 5
-reports = np.array([[ 1,  1, -1, -1, 233, 16027.59],
-                    [ 1, -1, -1, -1, 199,     0.  ],
-                    [ 1,  1, -1, -1, 233, 16027.59],
-                    [ 1,  1,  1, -1, 250,     0.  ],
-                    [-1, -1,  1,  1, 435,  8001.00],
-                    [-1, -1,  1,  1, 435, 19999.00]])
-reputation = [1, 1, 1, 1, 1, 1]
-scaled = [0, 0, 0, 0, 1, 1]
-scaled_max = [1, 1, 1, 1, 435, 20000]
-scaled_min = [-1, -1, -1, -1, 0, 8000]
+s = tester.state()
+tester.gas_limit = 100000000
+s = tester.state()
 
 #############
 # Endpoints #
