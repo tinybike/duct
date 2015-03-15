@@ -54,23 +54,12 @@ body {
   text-align: center;
   margin-top: -5px;
 }
-.resolved {
-  display: none;
-}
 
 #modal-ok-box {
   display: none;
 }
 #modal-ok-button {
   margin-bottom: 0;
-}
-
-.tally {
-  transition: all 0.15s ease-in;
-  cursor: pointer;
-}
-.tally:hover {
-  background-color: #CEECF5;
 }
 
 #status-receiver {
